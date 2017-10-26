@@ -53,9 +53,9 @@ import static com.alamkanak.weekview.WeekViewUtil.today;
  * Created by Raquib-ul-Alam Kanak on 7/21/2014.
  * Website: http://alamkanak.github.io/
  */
-public class WeekView extends View {
+public class WeekViewPerWeek extends View {
 
-    protected enum Direction {
+    private enum Direction {
         NONE, LEFT, RIGHT, VERTICAL
     }
 
@@ -63,126 +63,132 @@ public class WeekView extends View {
     public static final int LENGTH_SHORT = 1;
     @Deprecated
     public static final int LENGTH_LONG = 2;
-    protected final Context mContext;
-    protected Calendar mHomeDate;
-    protected Calendar mMinDate;
-    protected Calendar mMaxDate;
-    protected Paint mTimeTextPaint;
-    protected float mTimeTextWidth;
-    protected float mTimeTextHeight;
-    protected Paint mHeaderTextPaint;
-    protected float mHeaderTextHeight;
-    protected float mHeaderHeight;
-    protected GestureDetectorCompat mGestureDetector;
-    protected OverScroller mScroller;
-    protected PointF mCurrentOrigin = new PointF(0f, 0f);
-    protected Direction mCurrentScrollDirection = Direction.NONE;
-    protected Paint mHeaderBackgroundPaint;
-    protected float mWidthPerDay;
-    protected Paint mDayBackgroundPaint;
-    protected Paint mHourSeparatorPaint;
-    protected float mHeaderMarginBottom;
-    protected Paint mTodayBackgroundPaint;
-    protected Paint mFutureBackgroundPaint;
-    protected Paint mPastBackgroundPaint;
-    protected Paint mFutureWeekendBackgroundPaint;
-    protected Paint mPastWeekendBackgroundPaint;
-    protected Paint mNowLinePaint;
-    protected Paint mTodayHeaderTextPaint;
-    protected Paint mEventBackgroundPaint;
-    protected Paint mNewEventBackgroundPaint;
-    protected float mHeaderColumnWidth;
-    protected List<EventRect> mEventRects;
-    protected TextPaint mEventTextPaint;
-    protected TextPaint mNewEventTextPaint;
-    protected Paint mHeaderColumnBackgroundPaint;
-    protected int mFetchedPeriod = -1; // the middle period the calendar has fetched.
-    protected boolean mRefreshEvents = false;
-    protected Direction mCurrentFlingDirection = Direction.NONE;
-    protected ScaleGestureDetector mScaleDetector;
-    protected boolean mIsZooming;
-    protected Calendar mFirstVisibleDay;
-    protected Calendar mLastVisibleDay;
-    protected int mMinimumFlingVelocity = 0;
-    protected int mScaledTouchSlop = 0;
-    protected EventRect mNewEventRect;
+    private final Context mContext;
+    private Calendar mHomeDate;
+    private Calendar mMinDate;
+    private Calendar mMaxDate;
+    private Paint mTimeTextPaint;
+    private float mTimeTextWidth;
+    private float mTimeTextHeight;
+    private Paint mHeaderTextPaint;
+    private float mHeaderTextHeight;
+    private float mHeaderHeight;
+    private GestureDetectorCompat mGestureDetector;
+    private OverScroller mScroller;
+    private PointF mCurrentOrigin = new PointF(0f, 0f);
+    private Direction mCurrentScrollDirection = Direction.NONE;
+    private Paint mHeaderBackgroundPaint;
+    private float mWidthPerDay;
+    private Paint mDayBackgroundPaint;
+    private Paint mHourSeparatorPaint;
+    private float mHeaderMarginBottom;
+    private Paint mTodayBackgroundPaint;
+    private Paint mFutureBackgroundPaint;
+    private Paint mPastBackgroundPaint;
+    private Paint mFutureWeekendBackgroundPaint;
+    private Paint mPastWeekendBackgroundPaint;
+    private Paint mNowLinePaint;
+    private Paint mTodayHeaderTextPaint;
+    private Paint mEventBackgroundPaint;
+    private Paint mNewEventBackgroundPaint;
+    private float mHeaderColumnWidth;
+    private List<EventRect> mEventRects;
+    private TextPaint mEventTextPaint;
+    private TextPaint mNewEventTextPaint;
+    private Paint mHeaderColumnBackgroundPaint;
+    private int mFetchedPeriod = -1; // the middle period the calendar has fetched.
+    private boolean mRefreshEvents = false;
+    private Direction mCurrentFlingDirection = Direction.NONE;
+    private ScaleGestureDetector mScaleDetector;
+    private boolean mIsZooming;
+    private Calendar mFirstVisibleDay;
+    private Calendar mLastVisibleDay;
+    private int mMinimumFlingVelocity = 0;
+    private int mScaledTouchSlop = 0;
+    private EventRect mNewEventRect;
 
     // Attributes and their default values.
-    protected int mHourHeight = 50;
-    protected int mNewHourHeight = -1;
-    protected int mMinHourHeight = 0; //no minimum specified (will be dynamic, based on screen)
-    protected int mEffectiveMinHourHeight = mMinHourHeight; //compensates for the fact that you can't keep zooming out.
-    protected int mMaxHourHeight = 250;
-    protected int mColumnGap = 10;
-    protected int mFirstDayOfWeek = Calendar.MONDAY;
-    protected int mTextSize = 12;
-    protected int mHeaderColumnPadding = 10;
-    protected int mHeaderColumnTextColor = Color.BLACK;
-    protected int mNumberOfVisibleDays = 3;
-    protected int mHeaderRowPadding = 10;
-    protected int mHeaderRowBackgroundColor = Color.WHITE;
-    protected int mDayBackgroundColor = Color.rgb(245, 245, 245);
-    protected int mPastBackgroundColor = Color.rgb(227, 227, 227);
-    protected int mFutureBackgroundColor = Color.rgb(245, 245, 245);
-    protected int mPastWeekendBackgroundColor = 0;
-    protected int mFutureWeekendBackgroundColor = 0;
-    protected int mNowLineColor = Color.rgb(102, 102, 102);
-    protected int mNowLineThickness = 5;
-    protected int mHourSeparatorColor = Color.rgb(230, 230, 230);
-    protected int mTodayBackgroundColor = Color.rgb(239, 247, 254);
-    protected int mHourSeparatorHeight = 2;
-    protected int mTodayHeaderTextColor = Color.rgb(39, 137, 228);
-    protected int mEventTextSize = 12;
-    protected int mEventTextColor = Color.BLACK;
-    protected int mEventPadding = 8;
-    protected int mHeaderColumnBackgroundColor = Color.WHITE;
-    protected int mDefaultEventColor;
-    protected int mNewEventColor;
-    protected int mNewEventId = -100;
-    protected Drawable mNewEventIconDrawable;
-    protected int mNewEventLengthInMinutes = 60;
-    protected int mNewEventTimeResolutionInMinutes = 15;
-    protected boolean mShowFirstDayOfWeekFirst = false;
+    private int mHourHeight = 50;
+    private int mNewHourHeight = -1;
+    private int mMinHourHeight = 0; //no minimum specified (will be dynamic, based on screen)
+    private int mEffectiveMinHourHeight = mMinHourHeight; //compensates for the fact that you can't keep zooming out.
+    private int mMaxHourHeight = 250;
+    private int mColumnGap = 10;
+    private int mFirstDayOfWeek = Calendar.MONDAY;
+    private int mTextSize = 12;
+    private int mHeaderColumnPadding = 10;
+    private int mHeaderColumnTextColor = Color.BLACK;
+    private int mNumberOfVisibleDays = 3;
+    private int mHeaderRowPadding = 10;
+    private int mHeaderRowBackgroundColor = Color.WHITE;
+    private int mDayBackgroundColor = Color.rgb(245, 245, 245);
+    private int mPastBackgroundColor = Color.rgb(227, 227, 227);
+    private int mFutureBackgroundColor = Color.rgb(245, 245, 245);
+    private int mPastWeekendBackgroundColor = 0;
+    private int mFutureWeekendBackgroundColor = 0;
+    private int mNowLineColor = Color.rgb(102, 102, 102);
+    private int mNowLineThickness = 5;
+    private int mHourSeparatorColor = Color.rgb(230, 230, 230);
+    private int mTodayBackgroundColor = Color.rgb(239, 247, 254);
+    private int mHourSeparatorHeight = 2;
+    private int mTodayHeaderTextColor = Color.rgb(39, 137, 228);
+    private int mEventTextSize = 12;
+    private int mEventTextColor = Color.BLACK;
+    private int mEventPadding = 8;
+    private int mHeaderColumnBackgroundColor = Color.WHITE;
+    private int mDefaultEventColor;
+    private int mNewEventColor;
+    private int mNewEventId = -100;
+    private Drawable mNewEventIconDrawable;
+    private int mNewEventLengthInMinutes = 60;
+    private int mNewEventTimeResolutionInMinutes = 15;
+    private boolean mShowFirstDayOfWeekFirst = false;
 
-    protected boolean mIsFirstDraw = true;
-    protected boolean mAreDimensionsInvalid = true;
+    private boolean mIsFirstDraw = true;
+    private boolean mAreDimensionsInvalid = true;
     @Deprecated
-    protected int mDayNameLength = LENGTH_LONG;
-    protected int mOverlappingEventGap = 0;
-    protected int mEventMarginVertical = 0;
-    protected float mXScrollingSpeed = 1f;
-    protected Calendar mScrollToDay = null;
-    protected double mScrollToHour = -1;
-    protected int mEventCornerRadius = 0;
-    protected boolean mShowDistinctWeekendColor = false;
-    protected boolean mShowNowLine = false;
-    protected boolean mShowDistinctPastFutureColor = false;
-    protected boolean mHorizontalFlingEnabled = true;
-    protected boolean mVerticalFlingEnabled = true;
-    protected int mAllDayEventHeight = 100;
-    protected float mZoomFocusPoint = 0;
-    protected boolean mZoomFocusPointEnabled = true;
-    protected int mScrollDuration = 250;
-    protected int mTimeColumnResolution = 60;
-    protected Typeface mTypeface = Typeface.DEFAULT_BOLD;
-    protected int mMinTime = 0;
-    protected int mMaxTime = 24;
-    protected boolean mAutoLimitTime = false;
+    private int mDayNameLength = LENGTH_LONG;
+    private int mOverlappingEventGap = 0;
+    private int mEventMarginVertical = 0;
+    private float mXScrollingSpeed = 1f;
+    private Calendar mScrollToDay = null;
+    private double mScrollToHour = -1;
+    private int mEventCornerRadius = 0;
+    private boolean mShowDistinctWeekendColor = false;
+    private boolean mShowNowLine = false;
+    private boolean mShowDistinctPastFutureColor = false;
+    private boolean mHorizontalFlingEnabled = true;
+    private boolean mVerticalFlingEnabled = true;
+    private int mAllDayEventHeight = 100;
+    private float mZoomFocusPoint = 0;
+    private boolean mZoomFocusPointEnabled = true;
+    private int mScrollDuration = 250;
+    private int mTimeColumnResolution = 60;
+    private Typeface mTypeface = Typeface.DEFAULT_BOLD;
+    private int mMinTime = 0;
+    private int mMaxTime = 24;
+    private boolean mAutoLimitTime = false;
 
     // Listeners.
-    protected EventClickListener mEventClickListener;
-    protected EventLongPressListener mEventLongPressListener;
-    protected WeekViewLoader mWeekViewLoader;
-    protected EmptyViewClickListener mEmptyViewClickListener;
-    protected EmptyViewLongPressListener mEmptyViewLongPressListener;
-    protected DateTimeInterpreter mDateTimeInterpreter;
-    protected ScrollListener mScrollListener;
-    protected AddEventClickListener mAddEventClickListener;
+    private EventClickListener mEventClickListener;
+    private EventLongPressListener mEventLongPressListener;
+    private WeekViewLoader mWeekViewLoader;
+    private EmptyViewClickListener mEmptyViewClickListener;
+    private EmptyViewLongPressListener mEmptyViewLongPressListener;
+    private DateTimeInterpreter mDateTimeInterpreter;
+    private ScrollListener mScrollListener;
+    private AddEventClickListener mAddEventClickListener;
 
-    protected final GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+    //Weekly
+    private float mOriginOfPastWeek;
+    private float mOriginOfNextWeek;
+    private float sizeOfWeekView;
+
+    private final GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
         @Override
         public boolean onDown(MotionEvent e) {
+            calculateNextOrBeforeOrigin();
             goToNearestOrigin();
             return true;
         }
@@ -225,12 +231,14 @@ public class WeekView extends View {
                     break;
             }
 
+            float minX = getXMinLimit();
+            float maxX = getXMaxLimit();
+
+
             // Calculate the new origin after scroll.
             switch (mCurrentScrollDirection) {
                 case LEFT:
                 case RIGHT:
-                    float minX = getXMinLimit();
-                    float maxX = getXMaxLimit();
                     if ((mCurrentOrigin.x - (distanceX * mXScrollingSpeed)) > maxX) {
                         mCurrentOrigin.x = maxX;
                     } else if ((mCurrentOrigin.x - (distanceX * mXScrollingSpeed)) < minX) {
@@ -238,7 +246,7 @@ public class WeekView extends View {
                     } else {
                         mCurrentOrigin.x -= distanceX * mXScrollingSpeed;
                     }
-                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+                    ViewCompat.postInvalidateOnAnimation(WeekViewPerWeek.this);
                     break;
                 case VERTICAL:
                     float minY = getYMinLimit();
@@ -250,7 +258,7 @@ public class WeekView extends View {
                     } else {
                         mCurrentOrigin.y -= distanceY;
                     }
-                    ViewCompat.postInvalidateOnAnimation(WeekView.this);
+                    ViewCompat.postInvalidateOnAnimation(WeekViewPerWeek.this);
                     break;
                 default:
                     break;
@@ -275,7 +283,7 @@ public class WeekView extends View {
             switch (mCurrentFlingDirection) {
                 case LEFT:
                 case RIGHT:
-                    mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, (int) getXMinLimit(), (int) getXMaxLimit(), (int) getYMinLimit(), (int) getYMaxLimit());
+                    mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (velocityX * mXScrollingSpeed), 0, (int) mOriginOfPastWeek, (int) mOriginOfNextWeek, (int) getYMinLimit(), (int) getYMaxLimit());
                     break;
                 case VERTICAL:
                     mScroller.fling((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, 0, (int) velocityY, (int) getXMinLimit(), (int) getXMaxLimit(), (int) getYMinLimit(), (int) getYMaxLimit());
@@ -284,7 +292,7 @@ public class WeekView extends View {
                     break;
             }
 
-            ViewCompat.postInvalidateOnAnimation(WeekView.this);
+            ViewCompat.postInvalidateOnAnimation(WeekViewPerWeek.this);
             return true;
         }
 
@@ -392,15 +400,15 @@ public class WeekView extends View {
         }
     };
 
-    public WeekView(Context context) {
+    public WeekViewPerWeek(Context context) {
         this(context, null);
     }
 
-    public WeekView(Context context, AttributeSet attrs) {
+    public WeekViewPerWeek(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public WeekView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public WeekViewPerWeek(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
         // Hold references.
@@ -600,7 +608,7 @@ public class WeekView extends View {
         return (int) ((mMaxTime - mMinTime) * (60.0 / mTimeColumnResolution));
     }
 
-    protected float getYMinLimit() {
+    private float getYMinLimit() {
         return -(mHourHeight * (mMaxTime - mMinTime)
                 + mHeaderHeight
                 + mHeaderRowPadding * 2
@@ -609,11 +617,11 @@ public class WeekView extends View {
                 - getHeight());
     }
 
-    protected float getYMaxLimit() {
+    private float getYMaxLimit() {
         return 0;
     }
 
-    protected float getXMinLimit() {
+    private float getXMinLimit() {
         if (mMaxDate == null) {
             return Integer.MIN_VALUE;
         } else {
@@ -627,7 +635,7 @@ public class WeekView extends View {
         }
     }
 
-    protected float getXMaxLimit() {
+    private float getXMaxLimit() {
         if (mMinDate == null) {
             return Integer.MAX_VALUE;
         } else {
@@ -959,7 +967,7 @@ public class WeekView extends View {
      * @param y The y position of the touch event.
      * @return The time and date at the clicked position.
      */
-    protected Calendar getTimeFromPoint(float x, float y) {
+    private Calendar getTimeFromPoint(float x, float y) {
         int leftDaysWithGaps = (int) -(Math.ceil(mCurrentOrigin.x / (mWidthPerDay + mColumnGap)));
         float startPixel = mCurrentOrigin.x + (mWidthPerDay + mColumnGap) * leftDaysWithGaps +
                 mHeaderColumnWidth;
@@ -1193,7 +1201,7 @@ public class WeekView extends View {
      * stored in "originalEvent". But the event that corresponds to rectangle the rectangle
      * instance will be stored in "event".
      */
-    class EventRect {
+    private class EventRect {
         public WeekViewEvent event;
         public WeekViewEvent originalEvent;
         public RectF rectF;
@@ -1338,7 +1346,7 @@ public class WeekView extends View {
      *
      * @param eventRects The events along with their wrapper class.
      */
-    protected void computePositionOfEvents(List<EventRect> eventRects) {
+    private void computePositionOfEvents(List<EventRect> eventRects) {
         // Make "collision groups" for all events that collide with others.
         List<List<EventRect>> collisionGroups = new ArrayList<List<EventRect>>();
         for (EventRect eventRect : eventRects) {
@@ -2431,6 +2439,19 @@ public class WeekView extends View {
         return val;
     }
 
+    // TODO MADE BY LUDO
+    private void calculateNextOrBeforeOrigin() {
+        sizeOfWeekView = (mWidthPerDay + mColumnGap) * 7;
+
+        mOriginOfNextWeek = mCurrentOrigin.x + sizeOfWeekView;
+        if (mOriginOfNextWeek > getXMaxLimit())
+            mOriginOfNextWeek = getXMaxLimit();
+
+        mOriginOfPastWeek = mCurrentOrigin.x - sizeOfWeekView;
+        if (mOriginOfPastWeek < getXMinLimit())
+            mOriginOfPastWeek = getXMinLimit();
+    }
+
     private void goToNearestOrigin() {
         double leftDays = mCurrentOrigin.x / (mWidthPerDay + mColumnGap);
 
@@ -2453,16 +2474,26 @@ public class WeekView extends View {
                 && mCurrentOrigin.x - nearestOrigin > getXMinLimit();
 
         if (mayScrollHorizontal) {
-            mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, -nearestOrigin, 0);
-            ViewCompat.postInvalidateOnAnimation(WeekView.this);
+            if (mCurrentScrollDirection == Direction.LEFT) {
+                mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) 0, 0);
+            } else if (mCurrentScrollDirection == Direction.RIGHT) {
+                mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) 0, 0);
+            }
+            ViewCompat.postInvalidateOnAnimation(WeekViewPerWeek.this);
         }
 
         if (nearestOrigin != 0 && mayScrollHorizontal) {
             // Stop current animation.
             mScroller.forceFinished(true);
             // Snap to date.
-            mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, -nearestOrigin, 0, (int) (Math.abs(nearestOrigin) / mWidthPerDay * mScrollDuration));
-            ViewCompat.postInvalidateOnAnimation(WeekView.this);
+            if (mCurrentScrollDirection == Direction.LEFT) {
+                //Log.d("TEST1", "Point d'origine: " + mCurrentOrigin.x + " | Ce qu'il reste à parcourir: " + (-(mCurrentOrigin.x % sizeOfWeekView) - sizeOfWeekView));
+                mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (-(mCurrentOrigin.x % sizeOfWeekView) - sizeOfWeekView), 0, (int) (Math.abs(nearestOrigin) / mWidthPerDay * mScrollDuration));
+            } else if (mCurrentScrollDirection == Direction.RIGHT) {
+                //Log.d("TEST2", "Point d'origine: " + mCurrentOrigin.x + " | Ce qu'il reste à parcourir: " + (-mCurrentOrigin.x % sizeOfWeekView));
+                mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) (-mCurrentOrigin.x % sizeOfWeekView), 0, (int) (Math.abs(nearestOrigin) / mWidthPerDay * mScrollDuration));
+            }
+            ViewCompat.postInvalidateOnAnimation(WeekViewPerWeek.this);
         }
         // Reset scrolling and fling direction.
         mCurrentScrollDirection = mCurrentFlingDirection = Direction.NONE;

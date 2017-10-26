@@ -1,8 +1,6 @@
 package com.alamkanak.weekview.sample;
 
-import android.graphics.Color;
 import android.graphics.RectF;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
@@ -12,8 +10,8 @@ import android.widget.Toast;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
-import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
+import com.alamkanak.weekview.WeekViewPerWeek;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,12 +24,12 @@ import java.util.Locale;
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
  * Website: http://alamkanak.github.io
  */
-public abstract class BaseActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener, WeekView.EmptyViewClickListener, WeekView.AddEventClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements WeekViewPerWeek.EventClickListener, MonthLoader.MonthChangeListener, WeekViewPerWeek.EventLongPressListener, WeekViewPerWeek.EmptyViewLongPressListener, WeekViewPerWeek.EmptyViewClickListener, WeekViewPerWeek.AddEventClickListener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
-    protected WeekView mWeekView;
+    protected WeekViewPerWeek mWeekView;
 
 
     @Override
@@ -40,7 +38,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         setContentView(R.layout.activity_base);
 
         // Get a reference for the week view in the layout.
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+        mWeekView = (WeekViewPerWeek) findViewById(R.id.weekView);
 
         // Show a toast message about the touched event.
         mWeekView.setOnEventClickListener(this);
@@ -62,13 +60,14 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         mWeekView.setAddEventClickListener(this);
 
         // Set minDate
-        /*Calendar minDate = Calendar.getInstance();
-        minDate.set(Calendar.DAY_OF_MONTH, 1);
-        minDate.add(Calendar.MONTH, 1);
+        Calendar minDate = Calendar.getInstance();
         mWeekView.setMinDate(minDate);
 
+        mWeekView.setNumberOfVisibleDays(7);
+        mWeekView.setXScrollingSpeed(1);
+
         // Set maxDate
-        Calendar maxDate = Calendar.getInstance();
+        /*Calendar maxDate = Calendar.getInstance();
         maxDate.add(Calendar.MONTH, 1);
         maxDate.set(Calendar.DAY_OF_MONTH, 10);
         mWeekView.setMaxDate(maxDate);
@@ -110,7 +109,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         setupDateTimeInterpreter(id == R.id.action_week_view);
-        switch (id){
+        switch (id) {
             case R.id.action_today:
                 mWeekView.goToToday();
                 return true;
@@ -158,6 +157,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     /**
      * Set up a date time interpreter which will show short date values when in week view and long
      * date values otherwise.
+     *
      * @param shortDate True if the date values should be short.
      */
     private void setupDateTimeInterpreter(final boolean shortDate) {
@@ -193,7 +193,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
     }
 
     protected String getEventTitle(Calendar time) {
-        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH)+1, time.get(Calendar.DAY_OF_MONTH));
+        return String.format("Event of %02d:%02d %s/%d", time.get(Calendar.HOUR_OF_DAY), time.get(Calendar.MINUTE), time.get(Calendar.MONTH) + 1, time.get(Calendar.DAY_OF_MONTH));
     }
 
     @Override
@@ -211,13 +211,13 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         Toast.makeText(this, "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
     }
 
-    public WeekView getWeekView() {
+    public WeekViewPerWeek getWeekView() {
         return mWeekView;
     }
 
     @Override
     public void onEmptyViewClicked(Calendar date) {
-        Toast.makeText(this, "Empty view" + " clicked: " + getEventTitle(date) , Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "Empty view" + " clicked: " + getEventTitle(date), Toast.LENGTH_SHORT).show();
     }
 
     @Override
