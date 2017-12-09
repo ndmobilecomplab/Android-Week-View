@@ -12,7 +12,7 @@ import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
 import com.alamkanak.weekview.WeekView;
 import com.alamkanak.weekview.WeekViewEvent;
-import com.alamkanak.weekview.WeekViewPerDay;
+import com.alamkanak.weekview.WeekViewAdvanced;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -25,12 +25,12 @@ import java.util.Locale;
  * Created by Raquib-ul-Alam Kanak on 1/3/2014.
  * Website: http://alamkanak.github.io
  */
-public abstract class BaseActivity extends AppCompatActivity implements WeekView.EventClickListener, MonthLoader.MonthChangeListener, WeekView.EventLongPressListener, WeekView.EmptyViewLongPressListener, WeekView.EmptyViewClickListener, WeekView.AddEventClickListener {
+public abstract class BaseActivity extends AppCompatActivity implements WeekViewAdvanced.EventClickListener, MonthLoader.MonthChangeListener, WeekViewAdvanced.EventLongPressListener, WeekViewAdvanced.EmptyViewLongPressListener, WeekViewAdvanced.EmptyViewClickListener, WeekViewAdvanced.AddEventClickListener {
     private static final int TYPE_DAY_VIEW = 1;
     private static final int TYPE_THREE_DAY_VIEW = 2;
     private static final int TYPE_WEEK_VIEW = 3;
     private int mWeekViewType = TYPE_THREE_DAY_VIEW;
-    protected WeekView mWeekView;
+    protected WeekViewAdvanced mWeekView;
 
 
     @Override
@@ -39,7 +39,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         setContentView(R.layout.activity_base);
 
         // Get a reference for the week view in the layout.
-        mWeekView = (WeekView) findViewById(R.id.weekView);
+        mWeekView = (WeekViewAdvanced) findViewById(R.id.weekView);
 
         // Show a toast message about the touched event.
         mWeekView.setOnEventClickListener(this);
@@ -213,7 +213,7 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         Toast.makeText(this, "Empty view long pressed: " + getEventTitle(time), Toast.LENGTH_SHORT).show();
     }
 
-    public WeekView getWeekView() {
+    public WeekViewAdvanced getWeekView() {
         return mWeekView;
     }
 
