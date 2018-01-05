@@ -10,9 +10,8 @@ import android.widget.Toast;
 
 import com.alamkanak.weekview.DateTimeInterpreter;
 import com.alamkanak.weekview.MonthLoader;
-import com.alamkanak.weekview.WeekView;
-import com.alamkanak.weekview.WeekViewEvent;
 import com.alamkanak.weekview.WeekViewAdvanced;
+import com.alamkanak.weekview.WeekViewEvent;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -111,7 +110,6 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
                 if (mWeekView.getNumberOfVisibleDays() == 7) {
                     Calendar cal = Calendar.getInstance(Locale.getDefault());
                     cal.set(Calendar.DAY_OF_WEEK, 2);
-                    Long time = cal.getTimeInMillis();
                     mWeekView.goToDate(cal);
                 }
                 return true;

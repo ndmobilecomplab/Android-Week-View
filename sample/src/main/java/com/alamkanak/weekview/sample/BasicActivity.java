@@ -2,7 +2,6 @@ package com.alamkanak.weekview.sample;
 
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.alamkanak.weekview.WeekViewEvent;
 
@@ -29,7 +28,6 @@ public class BasicActivity extends BaseActivity {
     public List<? extends WeekViewEvent> onMonthChange(int newYear, int newMonth) {
         // Populate the week view with some events.
         List<WeekViewEvent> events = new ArrayList<>();
-        Log.d("TEST", "test");
 
         Calendar startTime = Calendar.getInstance();
         startTime.set(Calendar.HOUR_OF_DAY, 3);

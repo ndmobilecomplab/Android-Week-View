@@ -179,7 +179,7 @@ public class WeekView extends View {
     protected ScrollListener mScrollListener;
     protected AddEventClickListener mAddEventClickListener;
 
-    private final GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
+    protected GestureDetector.SimpleOnGestureListener mGestureListener = new GestureDetector.SimpleOnGestureListener() {
 
         @Override
         public boolean onDown(MotionEvent e) {
@@ -2684,7 +2684,6 @@ public class WeekView extends View {
         @Override
         public boolean onScaleBegin(ScaleGestureDetector detector) {
             mIsZooming = true;
-            goToNearestOrigin();
 
             // Calculate focused point for scale action
             if (mZoomFocusPointEnabled) {
