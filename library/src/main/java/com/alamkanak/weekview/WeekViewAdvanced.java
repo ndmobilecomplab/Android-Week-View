@@ -1,6 +1,7 @@
 package com.alamkanak.weekview;
 
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.RectF;
 import android.support.v4.view.GestureDetectorCompat;
 import android.support.v4.view.ViewCompat;
@@ -33,6 +34,9 @@ public class WeekViewAdvanced extends WeekView {
     protected boolean isScaling = false;
 
     protected int offsetValueToSecureScreen = 9;
+
+    protected FinishedLoadingListener mFinishedLoadingListener;
+    protected Boolean firstDrawDone = false;
 
     protected class NewGestureDetector extends GestureDetector.SimpleOnGestureListener {
 
@@ -277,6 +281,11 @@ public class WeekViewAdvanced extends WeekView {
         mGestureDetector = new GestureDetectorCompat(mContext, new NewGestureDetector());
     }
 
+    @Override
+    protected void onFinishInflate() {
+        super.onFinishInflate();
+    }
+
     /////////////////////////////////////////////////////////////////
     //
     //      Functions related to scrolling.
@@ -322,9 +331,10 @@ public class WeekViewAdvanced extends WeekView {
             boolean mayScrollHorizontal = beforeScroll - startOriginForScroll < getXMaxLimit()
                     && mCurrentOrigin.x - startOriginForScroll > getXMinLimit();
 
+            // Stop current animation.
+            mScroller.forceFinished(true);
+
             if (isPassed && mayScrollHorizontal) {
-                // Stop current animation.
-                mScroller.forceFinished(true);
                 // Snap to date.
                 if (mCurrentScrollDirection == Direction.LEFT) {
                     mScroller.startScroll((int) mCurrentOrigin.x, (int) mCurrentOrigin.y, (int) ((beforeScroll - mCurrentOrigin.x) - sizeOfWeekView), 0, 200);
@@ -383,5 +393,36 @@ public class WeekViewAdvanced extends WeekView {
      */
     public float getWeekViewHeightWithoutDateNorHour() {
         return getHeight() - (mHeaderHeight + mHeaderRowPadding * 2 + mHeaderMarginBottom);
+    }
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        if (!firstDrawDone) {
+            firstDrawDone = true;
+            if (mFinishedLoadingListener != null)
+                mFinishedLoadingListener.onFinishedLoading();
+        }
+    }
+
+    /////////////////////////////////////////////////////////////////
+    //
+    //      Interfaces
+    //
+    /////////////////////////////////////////////////////////////////
+
+    public interface FinishedLoadingListener {
+        /**
+         * Triggered when view finished loading
+         */
+        void onFinishedLoading();
+    }
+
+    public void setFinishedLoadingListener(FinishedLoadingListener finishedLoadingListener) {
+        this.mFinishedLoadingListener = finishedLoadingListener;
+    }
+
+    public FinishedLoadingListener getFinishedLoadingListener() {
+        return mFinishedLoadingListener;
     }
 }

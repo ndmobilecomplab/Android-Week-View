@@ -59,6 +59,13 @@ public abstract class BaseActivity extends AppCompatActivity implements WeekView
         // Set AddEvent Click Listener
         mWeekView.setAddEventClickListener(this);
 
+        /*mWeekView.setFinishedLoadingListener(new WeekViewAdvanced.FinishedLoadingListener() {
+            @Override
+            public void onFinishedLoading() {
+                Log.d("TEST", " " + mWeekView.getWeekViewHeightWithoutDateNorHour());
+            }
+        });*/
+
         mWeekView.setNumberOfVisibleDays(7);
         mWeekView.setXScrollingSpeed(1);
 
